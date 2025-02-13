@@ -96,4 +96,14 @@ public class ContractService {
         Contract save = contractRepository.save(contract);
         return ContractResponse.fromEntity(save);
     }
+
+    public ContractResponse getContract(Long id, HttpServletRequest httpRequest) {
+        Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계약"));
+        Long userId = jwtUtil.getUserIdFromRequest(httpRequest);
+        if(!contract.getShipper().getId().equals(userId) || !contract.getForwarder().getId().equals(userId)){
+            throw new IllegalArgumentException("권한 없음");
+        }
+        return ContractResponse.fromEntity(contract);
+    }
 }
