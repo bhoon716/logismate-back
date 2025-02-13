@@ -5,4 +5,5 @@ public enum Region {
     BUSAN,
     LA,
     INCHEON,
+    HONGKON,
 }
