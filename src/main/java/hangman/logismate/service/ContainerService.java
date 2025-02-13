@@ -78,4 +78,6 @@ public class ContainerService {
         Container saved = containerRepository.save(container);
         return ContainerRegisterResponse.fromEntity(saved);
     }
+
+    // AIS 선박 위치 추적
 }

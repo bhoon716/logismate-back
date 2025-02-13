@@ -18,6 +18,11 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @GetMapping("/test")
+    public String test(){
+        return "test";
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> userSignup(@RequestBody SignupRequest request) {
         return ResponseEntity.ok(authService.userSignup(request));
