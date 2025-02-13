@@ -16,7 +16,6 @@ public class ContainerSearchResponse {
     private Long id;
     private User forwarder;
     private ImportExport importExport;
-    private TransportMethod transportMethod;
     private Region departure;
     private Region destination;
     private LocalDate expectedArrivalDate;
@@ -33,7 +32,6 @@ public class ContainerSearchResponse {
                 .id(container.getId())
                 .forwarder(container.getForwarder())
                 .importExport(container.getImportExport())
-                .transportMethod(container.getTransportMethod())
                 .departure(container.getDeparture())
                 .destination(container.getDestination())
                 .expectedArrivalDate(container.getExpectedArrivalDate())

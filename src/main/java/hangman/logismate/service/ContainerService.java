@@ -31,7 +31,6 @@ public class ContainerService {
     public List<ContainerSearchResponse> searchContainer(ContainerSearchRequest request) {
         return containerRepository.findAll().stream()
                 .filter(container -> request.getImportExport() == null || container.getImportExport().equals(request.getImportExport()))
-                .filter(container -> request.getTransportMethod() == null || container.getTransportMethod().equals(request.getTransportMethod()))
                 .filter(container -> request.getDeparture() == null || container.getDeparture().equals(request.getDeparture()))
                 .filter(container -> request.getDestination() == null || container.getDestination().equals(request.getDestination()))
                 .filter(container -> request.getExpectedArrivalDate() == null || container.getExpectedArrivalDate().isBefore(request.getExpectedArrivalDate()) || container.getExpectedArrivalDate().equals(request.getExpectedArrivalDate())) // 🔹 도착 희망일 이전 또는 같은 날짜 필터링
@@ -57,7 +56,6 @@ public class ContainerService {
         Container container = Container.builder()
                 .forwarder(forwarder)
                 .importExport(request.getImportExport())
-                .transportMethod(request.getTransportMethod())
                 .departure(request.getDeparture())
                 .destination(request.getDestination())
                 .expectedDepartureDate(request.getExpectedDepartureDate())
