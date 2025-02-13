@@ -12,7 +12,6 @@ import java.util.Set;
 public class ContainerSearchRequest {
 
     private ImportExport importExport; // 수출/수입 여부
-    private TransportMethod transportMethod; // 해상, 항공, 특송
     private Region departure; // 출발지
     private Region destination; // 도착지
     private Double weight; // 검색 시 필터링할 최대 용량 (kg)
