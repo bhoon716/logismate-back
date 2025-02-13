@@ -17,9 +17,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private UserRole userRole;
+
     private String email;
 
     private String password;
 
-    private UserRole userRole;
+    private String companyName;
+
+    private String RegisterBusinessNumber;
+
+    private String companyContact;
+
+    private String companyAddress;
+
+    private String companyImage;
 }

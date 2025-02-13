@@ -73,4 +73,10 @@ public class ContainerService {
         Container saved = containerRepository.save(container);
         return ContainerRegisterResponse.fromEntity(saved);
     }
+
+    public ContainerSearchResponse getContainer(Long id) {
+        Container container = containerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컨테이너"));
+        return ContainerSearchResponse.fromEntity(container);
+    }
 }

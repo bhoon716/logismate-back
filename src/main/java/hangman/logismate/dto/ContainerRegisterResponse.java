@@ -26,6 +26,7 @@ public class ContainerRegisterResponse {
     private Double maxVolume;
     private ContractStatus contractStatus;
     private Double cost;
+    private String mmsi;
 
     public static ContainerRegisterResponse fromEntity(Container container) {
         return ContainerRegisterResponse.builder()
@@ -43,6 +44,7 @@ public class ContainerRegisterResponse {
                 .maxVolume(container.getMaxVolume())
                 .contractStatus(container.getContractStatus())
                 .cost(container.getCost())
+                .mmsi(container.getMmsi())
                 .build();
     }
 }

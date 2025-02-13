@@ -70,4 +70,6 @@ public class Container {
 
     @Column(nullable = false)
     private Double cost; // 운임 비용
+
+    private String mmsi;
 }

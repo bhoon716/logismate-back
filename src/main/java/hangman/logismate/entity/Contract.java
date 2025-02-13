@@ -51,6 +51,8 @@ public class Contract {
     @Column(nullable = false)
     private Double cost; // 총 운송 비용
 
+    private String mmsi;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ContractStatus contractStatus; // 계약 상태

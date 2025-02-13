@@ -22,4 +22,5 @@ public class ContainerRegisterRequest {
     private Double maxWeight;
     private Double maxVolume;
     private Double cost;
+    private String mmsi;
 }

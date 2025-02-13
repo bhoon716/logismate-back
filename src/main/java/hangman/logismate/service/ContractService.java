@@ -30,7 +30,7 @@ public class ContractService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
-    // 화주: 계약 요청
+    // 계약 요청
     public ContractResponse requestContract(ContractRequest request, HttpServletRequest httpRequest) {
         Container container = containerRepository.findById(request.getContainerId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컨테이너"));
@@ -60,7 +60,7 @@ public class ContractService {
         return ContractResponse.fromEntity(save);
     }
 
-    // 화주: 본인 계약 모두 조회
+    // 본인 계약 전체 조회
     public List<ContractResponse> getAllShipperContract(HttpServletRequest httpRequest) {
         Long shipperId = jwtUtil.getUserIdFromRequest(httpRequest);
 
@@ -76,6 +76,13 @@ public class ContractService {
                 .toList();
     }
 
+    // 특정 계약 조회
+    public ContractResponse getContract(Long contractId) {
+        Contract contract = contractRepository.findById(contractId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계약"));
+        return ContractResponse.fromEntity(contract);
+    }
+
     // 포워더: 계약 상태 별 조회
     public List<ContractResponse> getAllContractByStatus(ContractStatus contractStatus, HttpServletRequest httpRequest) {
         Long forwarderId = jwtUtil.getUserIdFromRequest(httpRequest);
@@ -87,7 +94,7 @@ public class ContractService {
                 .toList();
     }
 
-    // 포워더: 계약 상태 수락 or 거절
+    // 포워더: 계약 상태 변경
     public ContractResponse setContractStatus(Long contractId, ContractStatus contractStatus) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계약"));

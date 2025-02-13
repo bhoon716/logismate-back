@@ -21,6 +21,7 @@ public class ContractResponse {
     private Set<InsuranceType> insuranceTypes; // 보험 종류
     private Set<AdditionalService> additionalServices; // 추가 서비스
     private Double cost; // 총 운송 비용
+    private String mmsi;
     private ContractStatus contractStatus; // 계약 상태
     private CargoStatus cargoStatus; // 화물 상태
 
@@ -38,6 +39,7 @@ public class ContractResponse {
                 .insuranceTypes(contract.getInsuranceTypes())
                 .additionalServices(contract.getAdditionalServices())
                 .cost(contract.getCost())
+                .mmsi(contract.getMmsi())
                 .contractStatus(contract.getContractStatus())
                 .cargoStatus(contract.getCargoStatus())
                 .build();

@@ -8,10 +8,7 @@ import hangman.logismate.service.ContainerService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +30,13 @@ public class ContainerController {
     @PostMapping("/register")
     public ResponseEntity<ContainerRegisterResponse> registerContainer(@RequestBody ContainerRegisterRequest request, HttpServletRequest httpRequest){
         ContainerRegisterResponse response = containerService.registerContainer(request, httpRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    // 화주: 컨테이너 개별 조회
+    @GetMapping("/{containerId}")
+    public ResponseEntity<ContainerSearchResponse> getContainer(@PathVariable Long containerId){
+        ContainerSearchResponse response = containerService.getContainer(containerId);
         return ResponseEntity.ok(response);
     }
 }

@@ -26,6 +26,7 @@ public class ContainerSearchResponse {
     private Double maxVolume;
     private ContractStatus contractStatus;
     private Double cost;
+    private String mmsi;
 
     public static ContainerSearchResponse fromEntity(Container container) {
         return ContainerSearchResponse.builder()
@@ -42,6 +43,7 @@ public class ContainerSearchResponse {
                 .maxVolume(container.getMaxVolume())
                 .contractStatus(container.getContractStatus())
                 .cost(container.getCost())
+                .mmsi(container.getMmsi())
                 .build();
     }
 }
