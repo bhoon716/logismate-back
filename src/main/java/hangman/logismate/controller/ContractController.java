@@ -30,7 +30,8 @@ public class ContractController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/status")
+    // 계약의 상태 별로 조회
+    @GetMapping("/by-status")
     public ResponseEntity<List<ContractResponse>> getContractsByStatus(
             HttpServletRequest httpRequest,
             @RequestParam ContractStatus contractStatus){
