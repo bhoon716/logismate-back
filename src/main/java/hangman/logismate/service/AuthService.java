@@ -9,6 +9,10 @@ import hangman.logismate.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import hangman.logismate.fileupload.AwsS3Uploader;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -16,12 +20,24 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final AwsS3Uploader awsS3Uploader; // AwsS3Uploader 주입
+
 
     // 회원가입
-    public SignupResponse userSignup(SignupRequest request) {
+    public SignupResponse userSignup(SignupRequest request, MultipartFile companyImage) {
         boolean isExist = userRepository.existsUserByEmail(request.getEmail());
         if(isExist){
             throw new IllegalArgumentException("이미 존재하는 이메일");
+        }
+
+        // S3에 이미지를 업로드하고 URL을 반환받음
+        String companyImageUrl = null;
+        if (companyImage != null && !companyImage.isEmpty()) {
+            try {
+                companyImageUrl = awsS3Uploader.uploadFile(companyImage); //url임
+            } catch (IOException e) {
+                throw new IllegalArgumentException("이미지 업로드 실패: " + e.getMessage());
+            }
         }
 
         User user = User.builder()
@@ -32,7 +48,7 @@ public class AuthService {
                 .businessRegistrationNumber(request.getBusinessRegistrationNumber())
                 .companyContact(request.getCompanyContact())
                 .companyAddress(request.getCompanyAddress())
-                .companyImagePath(request.getCompanyImagePath())
+                .companyImagePath(companyImageUrl)
                 .build();
 
         User saved = userRepository.save(user);
