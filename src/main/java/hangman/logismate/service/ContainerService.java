@@ -66,7 +66,7 @@ public class ContainerService {
                 .additionalServices(request.getAdditionalServices())
                 .maxWeight(request.getMaxWeight())
                 .maxVolume(request.getMaxVolume())
-                .contractStatus(ContractStatus.PENDING) // 기본 상태를 '대기'로 설정
+                .contractStatus(ContractStatus.REQUESTED) // 기본 상태를 '대기'로 설정
                 .cost(request.getCost())
                 .build();
 
