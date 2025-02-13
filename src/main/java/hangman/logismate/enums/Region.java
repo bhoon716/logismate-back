@@ -6,5 +6,4 @@ public enum Region {
     LA,
     INCHEON,
     HONGKON,
-    CALIFONIA,
 }
