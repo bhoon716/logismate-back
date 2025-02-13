@@ -22,10 +22,11 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> userSignup(
-            @RequestPart("request") SignupRequest request,     // JSON 데이터를 받음
-            @RequestPart("companyImage") MultipartFile companyImage) {    // 이미지 파일을 받음
+            @ModelAttribute SignupRequest request,    // multipart/form-data를 위한 @ModelAttribute 사용
+            @RequestParam("companyImage") MultipartFile companyImage) {    // 이미지 파일을 받음
         return ResponseEntity.ok(authService.userSignup(request, companyImage));
     }
+
 
     @PostMapping("/signin")
     public ResponseEntity<SigninResponse> userSignin(@RequestBody SigninRequest request) {
