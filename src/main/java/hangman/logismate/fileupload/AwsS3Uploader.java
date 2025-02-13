@@ -1,7 +1,8 @@
 package hangman.logismate.fileupload;
-
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.core.sync.RequestBody;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -50,14 +51,19 @@ public class AwsS3Uploader {
         }
     }
 
-    // S3에 파일을 업로드하는 메서드
     private String uploadToS3(MultipartFile file, String fileName) throws IOException {
         InputStream inputStream = file.getInputStream();
 
         // S3에 파일 업로드
-        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, null));
+        amazonS3.putObject(
+                PutObjectRequest.builder()  // PutObjectRequest를 builder로 생성
+                        .bucket(bucketName)     // 버킷 이름
+                        .key(fileName)          // 파일 이름
+                        .build(),               // build()로 PutObjectRequest 객체 생성
+                RequestBody.fromInputStream(inputStream, file.getSize()) // 파일의 InputStream을 RequestBody로 변환
+        );
 
         // 업로드한 파일의 URL 반환
-        return amazonS3.getUrl(bucketName, fileName).toString();
+        return amazonS3.utilities().getUrl(b -> b.bucket(bucketName).key(fileName)).toString();
     }
 }
