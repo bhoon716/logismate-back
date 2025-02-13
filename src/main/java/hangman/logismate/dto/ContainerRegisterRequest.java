@@ -12,7 +12,6 @@ import java.util.Set;
 public class ContainerRegisterRequest {
 
     private ImportExport importExport;
-    private TransportMethod transportMethod;
     private Region departure;
     private Region destination;
     private LocalDate expectedDepartureDate;

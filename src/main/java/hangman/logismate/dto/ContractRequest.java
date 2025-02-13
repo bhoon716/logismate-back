@@ -15,8 +15,6 @@ public class ContractRequest {
 
     private ImportExport importExport; // 수출, 수입
 
-    private TransportMethod transportMethod; // 해상, 항공, 특송
-
     private Region departure; // 출발지
 
     private Region destination; // 도착지
