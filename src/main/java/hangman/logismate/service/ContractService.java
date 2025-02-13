@@ -61,7 +61,7 @@ public class ContractService {
     }
 
     // 화주: 본인 계약 모두 조회
-    public List<ContractResponse> getAllShipperContract(HttpServletRequest httpRequest) {
+    public List<ContractResponse> getShipperContracts(HttpServletRequest httpRequest) {
         Long shipperId = jwtUtil.getUserIdFromRequest(httpRequest);
 
         User shipper = userRepository.findById(shipperId)
