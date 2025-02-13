@@ -25,8 +25,14 @@ public class AuthService {
         }
 
         User user = User.builder()
+                .userRole(request.getUserRole())
                 .email(request.getEmail())
                 .password(request.getPassword())
+                .companyName(request.getCompanyName())
+                .businessRegistrationNumber(request.getBusinessRegistrationNumber())
+                .companyContact(request.getCompanyContact())
+                .companyAddress(request.getCompanyAddress())
+                .companyImagePath(request.getCompanyImagePath())
                 .build();
 
         User saved = userRepository.save(user);

@@ -2,12 +2,10 @@ package hangman.logismate.service;
 
 import hangman.logismate.dto.ContainerRegisterRequest;
 import hangman.logismate.dto.ContainerRegisterResponse;
-import hangman.logismate.dto.ContainerSearchRequest;
 import hangman.logismate.dto.ContainerSearchResponse;
 import hangman.logismate.entity.Container;
 import hangman.logismate.entity.User;
-import hangman.logismate.enums.ContractStatus;
-import hangman.logismate.enums.UserRole;
+import hangman.logismate.enums.*;
 import hangman.logismate.repository.ContainerRepository;
 import hangman.logismate.repository.UserRepository;
 import hangman.logismate.util.JwtUtil;
@@ -16,7 +14,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -28,19 +28,24 @@ public class ContainerService {
     private final JwtUtil jwtUtil;
 
     // 화주: 컨테이너 검색
-    public List<ContainerSearchResponse> searchContainer(ContainerSearchRequest request) {
+    public List<ContainerSearchResponse> searchContainer(
+            ImportExport importExport, Region departure, Region destination, Double weight,
+            Double volume, LocalDate expectedArrivalDate, Set<InsuranceType> insuranceTypes,
+            Set<AdditionalService> additionalServices, Double minimumCost, Double maximumCost
+    ) {
         return containerRepository.findAll().stream()
-                .filter(container -> request.getImportExport() == null || container.getImportExport().equals(request.getImportExport()))
-                .filter(container -> request.getTransportMethod() == null || container.getTransportMethod().equals(request.getTransportMethod()))
-                .filter(container -> request.getDeparture() == null || container.getDeparture().equals(request.getDeparture()))
-                .filter(container -> request.getDestination() == null || container.getDestination().equals(request.getDestination()))
-                .filter(container -> request.getExpectedArrivalDate() == null || container.getExpectedArrivalDate().isBefore(request.getExpectedArrivalDate()) || container.getExpectedArrivalDate().equals(request.getExpectedArrivalDate())) // 🔹 도착 희망일 이전 또는 같은 날짜 필터링
-                .filter(container -> request.getWeight() == null || container.getMaxWeight() >= request.getWeight())  // 최대 무게 필터링
-                .filter(container -> request.getVolume() == null || container.getMaxVolume() >= request.getVolume())  // 최대 부피 필터링
-                .filter(container -> request.getMinimumCost() == null || container.getCost() >= request.getMinimumCost())  // 최소 비용 필터링
-                .filter(container -> request.getMaximumCost() == null || container.getCost() <= request.getMaximumCost())  // 최대 비용 필터링
-                .filter(container -> request.getInsuranceTypes() == null || request.getInsuranceTypes().isEmpty() || container.getInsuranceTypes().containsAll(request.getInsuranceTypes()))  // 보험 필터링
-                .filter(container -> request.getAdditionalServices() == null || request.getAdditionalServices().isEmpty() || container.getAdditionalServices().containsAll(request.getAdditionalServices()))  // 추가 서비스 필터링
+                .filter(container -> importExport == null || container.getImportExport() == importExport)
+                .filter(container -> departure == null || container.getDeparture() == departure)
+                .filter(container -> destination == null || container.getDestination() == destination)
+                .filter(container -> expectedArrivalDate == null || !container.getExpectedArrivalDate().isAfter(expectedArrivalDate))
+                .filter(container -> weight == null || container.getMaxWeight() >= weight)
+                .filter(container -> volume == null || container.getMaxVolume() >= volume)
+                .filter(container -> minimumCost == null || container.getCost() >= minimumCost)
+                .filter(container -> maximumCost == null || container.getCost() <= maximumCost)
+                .filter(container -> insuranceTypes == null || insuranceTypes.isEmpty() ||
+                        container.getInsuranceTypes().stream().anyMatch(insuranceTypes::contains))
+                .filter(container -> additionalServices == null || additionalServices.isEmpty() ||
+                        container.getAdditionalServices().stream().anyMatch(additionalServices::contains))
                 .map(ContainerSearchResponse::fromEntity)
                 .toList();
     }
@@ -50,14 +55,14 @@ public class ContainerService {
         Long forwarderId = jwtUtil.getUserIdFromRequest(httpRequest);
         User forwarder = userRepository.findById(forwarderId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 포워더"));
-        if (!forwarder.getUserRole().equals(UserRole.FORWARDER)) {
-            throw new IllegalArgumentException("존재하지 않는 포워더");
+
+        if (forwarder.getUserRole() != UserRole.FORWARDER) {
+            throw new IllegalArgumentException("포워더 권한이 없습니다.");
         }
 
         Container container = Container.builder()
                 .forwarder(forwarder)
                 .importExport(request.getImportExport())
-                .transportMethod(request.getTransportMethod())
                 .departure(request.getDeparture())
                 .destination(request.getDestination())
                 .expectedDepartureDate(request.getExpectedDepartureDate())

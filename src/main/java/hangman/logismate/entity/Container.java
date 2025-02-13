@@ -30,10 +30,6 @@ public class Container {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TransportMethod transportMethod; // 해상, 항공, 특송
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Region departure; // 출발지
 
     @Enumerated(EnumType.STRING)

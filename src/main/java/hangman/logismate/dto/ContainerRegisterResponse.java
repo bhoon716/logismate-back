@@ -15,7 +15,6 @@ public class ContainerRegisterResponse {
     private Long id;
     private Long forwarderId;
     private ImportExport importExport;
-    private TransportMethod transportMethod;
     private Region departure;
     private Region destination;
     private LocalDate expectedDepartureDate;
@@ -32,7 +31,6 @@ public class ContainerRegisterResponse {
                 .id(container.getId())
                 .forwarderId(container.getForwarder().getId())
                 .importExport(container.getImportExport())
-                .transportMethod(container.getTransportMethod())
                 .departure(container.getDeparture())
                 .destination(container.getDestination())
                 .expectedDepartureDate(container.getExpectedDepartureDate())
